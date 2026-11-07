@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate — {{ cert.name }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:      #1B2A4A;
+      --gold:      #C9A84C;
+      --dark-gold: #8B6914;
+    }
+    body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+
+    .top-bar {
+      background: var(--navy);
+      color: #fff;
+      padding: 12px 0;
+      border-bottom: 3px solid var(--gold);
+    }
+    .top-bar .college-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+    .top-bar .tagline { font-size: .8rem; color: #ccc; }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--navy), #2c4275);
+      color: #fff;
+      padding: 28px 0;
+      border-bottom: 4px solid var(--gold);
+      margin-bottom: 32px;
+    }
+    .page-header h2 { font-weight: 700; margin: 0; }
+    .page-header small { color: #aaa; font-size: .85rem; }
+
+    /* ── Action bar ── */
+    .action-bar {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .action-bar .cert-id-badge {
+      font-family: monospace;
+      background: #eef2ff;
+      color: var(--navy);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .btn-print {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .btn-print:hover { background: var(--dark-gold); color: #fff; }
+
+    .btn-download {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 9px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background .2s;
+    }
+    .btn-download:hover { background: #1e7e34; color: #fff; }
+
+    .btn-verify {
+      background: transparent;
+      color: var(--navy);
+      border: 2px solid var(--navy);
+      padding: 7px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .btn-verify:hover { background: var(--navy); color: #fff; }
+
+    /* ── PDF viewer ── */
+    .pdf-wrapper {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 28px rgba(0,0,0,.1);
+      overflow: hidden;
+    }
+    .pdf-wrapper iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    /* ── Details card ── */
+    .detail-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.07);
+    }
+    .detail-card h6 {
+      color: var(--navy);
+      font-weight: 700;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .detail-row { margin-bottom: 12px; }
+    .detail-label { font-size: .78rem; color: #888; text-transform: uppercase; letter-spacing: .5px; }
+    .detail-value { font-weight: 600; color: #222; }
+
+    .verified-badge {
+      background: #d4edda;
+      color: #155724;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="container d-flex align-items-center gap-3">
+    <i class="fa-solid fa-graduation-cap fa-2x" style="color:var(--gold)"></i>
+    <div>
+      <div class="college-name">NIZAM COLLEGE</div>
+      <div class="tagline">Osmania University &bull; Hyderabad, Telangana</div>
+    </div>
+    <div class="ms-auto d-flex gap-2">
+      <a href="/admin" class="btn btn-sm btn-outline-warning">
+        <i class="fa-solid fa-gauge me-1"></i>Dashboard
+      </a>
+      <a href="/logout" class="btn btn-sm btn-outline-light">
+        <i class="fa-solid fa-right-from-bracket me-1"></i>Logout
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="container">
+    <h2><i class="fa-solid fa-certificate me-2" style="color:var(--gold)"></i>Certificate Issued</h2>
+    <small>Certificate successfully generated for <strong>{{ cert.name }}</strong></small>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <div class="row g-4">
+
+    <!-- ── PDF preview + action bar ── -->
+    <div class="col-lg-8">
+
+      <!-- Action bar -->
+      <div class="action-bar">
+        <span class="cert-id-badge">
+          <i class="fa-solid fa-fingerprint me-1"></i>{{ cert.id }}
+        </span>
+        <span class="verified-badge">
+          <i class="fa-solid fa-circle-check me-1"></i>Verified & Authentic
+        </span>
+        <div class="ms-auto d-flex gap-2 flex-wrap">
+          <button class="btn btn-print" onclick="printCertificate()">
+            <i class="fa-solid fa-print me-2"></i>Print Certificate
+          </button>
+          <a href="/download/{{ cert.id }}" class="btn btn-download">
+            <i class="fa-solid fa-file-arrow-down me-2"></i>Download PDF
+          </a>
+          <a href="/verify/{{ cert.id }}" class="btn btn-verify">
+            <i class="fa-solid fa-shield-halved me-1"></i>Verify
+          </a>
+        </div>
+      </div>
+
+      <!-- PDF embed -->
+      <div class="pdf-wrapper">
+        <iframe id="certFrame"
+                src="/pdf/{{ cert.id }}"
+                title="Certificate PDF">
+          <p>Your browser does not support PDF viewing.
+             <a href="/pdf/{{ cert.id }}">Click here to view the PDF.</a>
+          </p>
+        </iframe>
+      </div>
+
+      <div class="text-muted small mt-2 text-center">
+        <i class="fa-solid fa-info-circle me-1"></i>
+        If the PDF does not load, use the <strong>Download PDF</strong> button above.
+      </div>
+    </div>
+
+    <!-- ── Certificate details ── -->
+    <div class="col-lg-4">
+      <div class="detail-card mb-3">
+        <h6><i class="fa-solid fa-id-card me-2"></i>Certificate Details</h6>
+
+        <div class="detail-row">
+          <div class="detail-label">Recipient Name</div>
+          <div class="detail-value">{{ cert.name }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Course / Program</div>
+          <div class="detail-value">{{ cert.course }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Event / Workshop</div>
+          <div class="detail-value">{{ cert.event }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Date of Completion</div>
+          <div class="detail-value">{{ cert.date }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Issued On</div>
+          <div class="detail-value">{{ cert.created_at }}</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Certificate ID</div>
+          <div class="detail-value" style="font-family:monospace; font-size:.85rem;">
+            {{ cert.id }}
+          </div>
+        </div>
+      </div>
+
+      <!-- QR info card -->
+      <div class="detail-card">
+        <h6><i class="fa-solid fa-qrcode me-2"></i>Authenticity</h6>
+        <p class="small text-muted mb-3">
+          A unique QR code is embedded in this certificate. Scan it to instantly
+          verify its authenticity on the Nizam College portal.
+        </p>
+        <a href="/verify/{{ cert.id }}" class="btn w-100"
+           style="background:var(--navy); color:#fff; font-weight:600;">
+          <i class="fa-solid fa-shield-halved me-2"></i>Verify This Certificate
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function printCertificate() {
+    // Open PDF in new tab — user can print from browser's print dialog
+    const win = window.open('/pdf/{{ cert.id }}', '_blank');
+    if (win) {
+      win.addEventListener('load', function () {
+        try { win.print(); } catch (e) { /* let user print manually */ }
+      });
+    }
+  }
+</script>
+</body>
+</html>
